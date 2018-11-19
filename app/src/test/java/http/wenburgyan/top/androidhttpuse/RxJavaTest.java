@@ -8,6 +8,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -100,5 +101,72 @@ public class RxJavaTest {
         System.out.println(Thread.currentThread().getName()+"----end");
     }
 
+    @Test
+    public void testConcurrency(){
+        Flowable.range(1, 10)
+                .observeOn(Schedulers.computation())
+                .map(v -> {
+                    System.out.println(Thread.currentThread().getName()+"---- in map ");
+                    Thread.sleep(1000);
+                    return v * v;
+                })
+                .blockingSubscribe(x -> {
+                    System.out.println(Thread.currentThread().getName()+"---- subscriber action ");
+                    System.out.println(x);
+                });
+    }
 
+    @Test
+    public void testParallel(){
+        Flowable.range(1, 3)
+        .flatMap(v ->
+                {
+                    System.out.println(Thread.currentThread().getName()+"---- flat map");
+                    return Flowable.just(v)
+                            .subscribeOn(Schedulers.computation())
+                            .map(w -> {
+                                System.out.println(Thread.currentThread().getName()+"---- map");
+                                return w * w;
+                            });
+                }
+        )
+        .blockingSubscribe(System.out::println);
+    }
+
+    @Test
+    public void testSchedule(){
+        Scheduler scheduler1 = Schedulers.newThread();
+        Scheduler scheduler2 = Schedulers.newThread();
+
+        Observable.fromCallable(()-> {
+            System.out.println(Thread.currentThread().getName()+"---- event");
+            return 2;
+        })
+                .subscribeOn(scheduler1)
+                .map(v-> {
+                    System.out.println(Thread.currentThread().getName()+"---- map1");
+                    return v * 2;
+                })
+                .observeOn(Schedulers.newThread())
+                .map(v-> {
+                    System.out.println(Thread.currentThread().getName()+"---- map2");
+                    return v * 2;
+                })
+                .subscribeOn(scheduler2)
+                .map(v-> {
+                    System.out.println(Thread.currentThread().getName()+"---- map3");
+                    return v * 2;
+                })
+                .observeOn(Schedulers.newThread())
+                .subscribe(v-> {
+                    System.out.println(Thread.currentThread().getName()+"---- subscriber action");
+                    System.out.println(v);
+                });
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
