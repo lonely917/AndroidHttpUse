@@ -9,6 +9,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -143,6 +144,9 @@ public class RxJavaTest {
             return 2;
         })
                 .subscribeOn(scheduler1)
+                .doOnSubscribe(disposable -> {
+                    System.out.println(Thread.currentThread().getName()+"---- doOnSubscribe");
+                })
                 .map(v-> {
                     System.out.println(Thread.currentThread().getName()+"---- map1");
                     return v * 2;
