@@ -15,4 +15,9 @@ public class RetrofitTest {
     public void testSimpleMockService() throws IOException {
         SimpleMockService.main("");
     }
+
+    @Test
+    public void testGankio(){
+
+    }
 }

@@ -51,19 +51,24 @@ public final class SimpleService {
             System.out.println(contributor.login + " (" + contributor.contributions + ")");
         }
 
-        //asynchronized call
-        call.enqueue(new Callback<List<Contributor>>() {
-            @Override
-            public void onResponse(Call<List<Contributor>> call, Response<List<Contributor>> response) {
-                for (Contributor contributor : response.body()) {
-                    System.out.println(contributor.login + " (" + contributor.contributions + ")");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Contributor>> call, Throwable t) {
-
-            }
-        });
+//        //asynchronized call
+//        call.enqueue(new Callback<List<Contributor>>() {
+//            @Override
+//            public void onResponse(Call<List<Contributor>> call, Response<List<Contributor>> response) {
+//                for (Contributor contributor : response.body()) {
+//                    System.out.println(contributor.login + " (" + contributor.contributions + ")");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Contributor>> call, Throwable t) {
+//
+//            }
+//        });
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }
