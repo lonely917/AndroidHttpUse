@@ -45,6 +45,9 @@ public class GankIoTest {
 
         @GET("xiandu/categories")
         Call<CategoryResponse> categaries();
+
+        @GET("today")
+        Call<String> todayContent();
     }
 
     @Test
@@ -63,6 +66,7 @@ public class GankIoTest {
             Response<TodayResponse> response = call.execute();
             System.out.println(response.toString());
             TodayResponse todayResponse = response.body();
+//            System.out.println(response.raw().body().string());
             System.out.println(new Gson().toJson(todayResponse));
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,6 +83,15 @@ public class GankIoTest {
             e.printStackTrace();
         }
 
+        System.out.println("call by content");
+        try {
+            Call<String> callContent = gankIO.todayContent();
+            Response<String> response = callContent.execute();
+            String content = response.body();
+            System.out.println(content);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Test
