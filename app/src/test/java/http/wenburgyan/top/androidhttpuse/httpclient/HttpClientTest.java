@@ -4,6 +4,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -13,6 +14,17 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
 import java.io.IOException;
+
+//import cz.msebera.android.httpclient.HttpEntity;
+//import cz.msebera.android.httpclient.HttpResponse;
+//import cz.msebera.android.httpclient.client.ClientProtocolException;
+//import cz.msebera.android.httpclient.client.ResponseHandler;
+//import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
+//import cz.msebera.android.httpclient.client.methods.HttpGet;
+//import cz.msebera.android.httpclient.client.methods.HttpPost;
+//import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+//import cz.msebera.android.httpclient.impl.client.HttpClients;
+//import cz.msebera.android.httpclient.util.EntityUtils;
 
 /**
  * Created by ywb on 2018-11-26.
@@ -88,6 +100,21 @@ public class HttpClientTest {
         }
         finally {
             System.out.println("end");
+        }
+    }
+
+    @Test
+    public void testFluent(){
+        try {
+            String content = Request.Get("https://gank.io/api/today")
+                                .connectTimeout(3000)
+                                .socketTimeout(3000)
+                                .execute().returnContent().asString();
+            System.out.println(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            System.out.println("finish");
         }
     }
 }
