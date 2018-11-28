@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +49,9 @@ public class GankIoTest {
 
         @GET("today")
         Call<String> todayContent();
+
+        @GET("today")
+        Call<ResponseBody> todayResponseBody();
     }
 
     @Test
@@ -89,6 +93,19 @@ public class GankIoTest {
             Response<String> response = callContent.execute();
             String content = response.body();
             System.out.println(content);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        System.out.println("call by responsebody");
+        try {
+            Call<ResponseBody> callContent = gankIO.todayResponseBody();
+            Response<ResponseBody> response = callContent.execute();
+            ResponseBody body = response.body();
+            String content = body.string();
+            System.out.println(body);
+            System.out.println(content);
+            body.close();
         }catch (IOException e){
             e.printStackTrace();
         }
