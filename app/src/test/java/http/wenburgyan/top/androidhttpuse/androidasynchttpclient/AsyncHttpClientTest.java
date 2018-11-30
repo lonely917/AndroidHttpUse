@@ -13,7 +13,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class AsyncHttpClientTest {
 
-    //demo,这里是junit,没有Android上下文，运行会失败，需要在Android test中运行
+    //demo,没有Android上下文，运行会失败，需要在Android test中运行
     @Test
     public void test(){
         AsyncHttpClient client = new AsyncHttpClient();
