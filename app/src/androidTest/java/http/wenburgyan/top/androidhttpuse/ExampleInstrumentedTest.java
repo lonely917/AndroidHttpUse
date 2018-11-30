@@ -2,6 +2,7 @@ package http.wenburgyan.top.androidhttpuse;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.UiThread;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import cz.msebera.android.httpclient.Header;
+import top.wenburgyan.http.MainActivity;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -24,6 +26,8 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+    private MainActivity mainActivity;
+
     static final String TAG = "ywb";
 
     @Test
@@ -42,7 +46,7 @@ public class ExampleInstrumentedTest {
         assertEquals(false, appContext.getMainLooper().isCurrentThread());
         new Handler(appContext.getMainLooper()).post(() -> http());
         try {
-            Thread.sleep(200000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -50,7 +54,7 @@ public class ExampleInstrumentedTest {
 
     public void http(){
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("https://www.google.com", new AsyncHttpResponseHandler() {
+        client.get("https://www.baidu.com", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -63,6 +67,7 @@ public class ExampleInstrumentedTest {
                 // called when response HTTP status is "200 OK"
                 Log.d(TAG, "onSuccess: "+"statusCode"+statusCode);
                 Log.d(TAG, "onSuccess: "+new String(response));
+                System.out.println("ywb:"+ new String(response));
             }
 
             @Override

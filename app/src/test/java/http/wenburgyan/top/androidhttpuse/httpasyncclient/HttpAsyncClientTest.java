@@ -10,6 +10,7 @@ import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.client.methods.HttpAsyncMethods;
 import org.apache.http.nio.protocol.HttpAsyncRequestProducer;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -31,7 +32,6 @@ public class HttpAsyncClientTest {
         try {
             // Start the client
             httpclient.start();
-
             // Execute request
             final HttpGet request1 = new HttpGet("http://www.apache.org/");
             Future<HttpResponse> future = httpclient.execute(request1, null);
@@ -74,15 +74,18 @@ public class HttpAsyncClientTest {
                 @Override
                 protected void onResponseReceived(final HttpResponse response) {
                     this.response = response;
+                    System.out.println("onResponseReceived:" + response.toString() );
                 }
 
                 @Override
                 protected void onCharReceived(final CharBuffer buf, final IOControl ioctrl) throws IOException {
                     // Do something useful
+                    System.out.println("onCharReceived:" + buf.length()+" -buf content:" +buf.toString());
                 }
 
                 @Override
                 protected void releaseResources() {
+                    System.out.println("releaseResources:" );
                 }
 
                 @Override
@@ -124,7 +127,10 @@ public class HttpAsyncClientTest {
             HttpGet request = new HttpGet("http://httpbin.org/get");
             Future<HttpResponse> future = httpclient.execute(request, null);
             HttpResponse response = future.get();
-            System.out.println("Response: " + response.getStatusLine());
+            System.out.println("Response status: " + response.getStatusLine());
+            System.out.println("Response toString: " + response.toString());
+            System.out.println("Response entity: " + response.getEntity().toString());
+            System.out.println("Response entity -> content: " + EntityUtils.toString(response.getEntity()) );
             System.out.println("Shutting down");
         } finally {
             httpclient.close();
